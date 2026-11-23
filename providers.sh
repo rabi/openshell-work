@@ -11,6 +11,7 @@ import_profile() {
   local file=$1 id=$2 rendered
   rendered="$(mktemp).yaml"
   render_to "$rendered" "$file"
+  openshell profile lint -f "$rendered"
   if openshell profile describe "$id" >/dev/null 2>&1; then
     openshell profile export "$id" > "/tmp/${id}-current.yaml"
     # keep the server's resource_version, take everything else from the file

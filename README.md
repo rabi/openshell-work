@@ -82,6 +82,17 @@ JIRA_BASE_URL=<jira url>                  # sandbox mcp.json
 JIRA_EMAIL=<your email>                   # sandbox mcp.json
 ```
 
+- **Host-local services**: sandboxes reach services on the gateway host via the
+  `host.openshell.internal` DNS alias (resolves to the gateway host, *not*
+  loopback inside the sandbox). Don't bind such services to localhost-only.
+- **Credential rotation**: network-policy changes hot-reload into running
+  sandboxes, but credential *value* changes do not — a running agent keeps the
+  placeholder it started with. Re-run `providers.sh`, then recreate/restart
+  sandboxes to pick up new keys.
+- **Model preselect**: `PI_MODEL=enmaas/glm-4.7 bash run.sh up` starts pi with
+  that model already selected (no `/model` picker needed).
+- `providers.sh` lints every profile (`openshell profile lint`) before import.
+
 ## Gotchas
 
 - **Config is baked, not mounted.** `pi-config/` and `workspace/` are copied into

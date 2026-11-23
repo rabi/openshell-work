@@ -67,6 +67,10 @@ cmd_up() {
   sandbox="pi-run-$(date +%s | tail -c 5)$RANDOM" # max name length is 19
   remote="/workspace/$(basename "$repo")"
   echo "== creating sandbox $sandbox"
+  # optional model preselect, e.g. PI_MODEL=enmaas/glm-4.7
+  local model_args=()
+  [ -n "${PI_MODEL:-}" ] && model_args=(--model "$PI_MODEL")
+
   local policy_rendered="$(mktemp).yaml"
   render_to "$policy_rendered" ./policy.yaml
   local create_args=(--name "$sandbox" --from "$image" --policy "$policy_rendered" "${args[@]}"
@@ -76,7 +80,7 @@ cmd_up() {
     # docs model: canonical main process waits for the upload, then becomes pi;
     # reattachable with `openshell sandbox connect` after Ctrl-P Ctrl-Q
     openshell sandbox create "${create_args[@]}" --tty --detach -- \
-      sh -c "while [ ! -e /workspace/.pi-ready ]; do sleep 1; done; cd '$remote' && exec /usr/local/bin/pi" >/dev/null
+      sh -c "while [ ! -e /workspace/.pi-ready ]; do sleep 1; done; cd '$remote' && exec /usr/local/bin/pi${PI_MODEL:+ --model '$PI_MODEL'}" >/dev/null
   else
     openshell sandbox create "${create_args[@]}" --detach >/dev/null
   fi
@@ -126,7 +130,7 @@ cmd_up() {
       exec openshell sandbox connect "$sandbox"
     fi
     echo "== pi (in $remote)"
-    exec openshell sandbox exec -n "$sandbox" --workdir "$remote" -- /usr/local/bin/pi
+    exec openshell sandbox exec -n "$sandbox" --workdir "$remote" -- /usr/local/bin/pi "${model_args[@]}"
   fi
 }
 
