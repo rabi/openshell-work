@@ -1,0 +1,30 @@
+{
+  "mcpServers": {
+    "context7": {
+      "command": "node",
+      "args": ["/usr/local/lib/node_modules/@upstash/context7-mcp/dist/index.js"],
+      "env": { "CONTEXT7_API_KEY": "$CONTEXT7_API_KEY" },
+      "description": "Up-to-date library and framework documentation lookup"
+    },
+    "grep_app": {
+      "command": "node",
+      "args": ["/usr/local/lib/node_modules/grep-mcp/bin/grep-mcp.js"],
+      "description": "Search source code across public GitHub repositories"
+    },
+    "jira-mcp": {
+      "command": "node",
+      "args": ["/usr/local/lib/node_modules/mcp-jira-cloud/dist/index.js"],
+      "env": {
+        "JIRA_BASE_URL": "${JIRA_BASE_URL}",
+        "JIRA_API_TOKEN": "$JIRA_API_TOKEN",
+        "JIRA_EMAIL": "${JIRA_EMAIL}"
+      },
+      "description": "Jira Cloud - issues, sprints, projects"
+    },
+    "github": {
+      "url": "https://api.githubcopilot.com/mcp",
+      "headers": { "Authorization": "Bearer $GITHUB_TOKEN" },
+      "description": "GitHub API - repos, issues, pull requests, code"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+id: rhcorp-qwen
+display_name: RH Corp Qwen
+description: Red Hat apicast Qwen3.8-27B-FP8 inference
+category: inference
+inference_capable: true
+credentials:
+  - name: api_key
+    description: RH Corp apicast API key
+    env_vars: [QWEN_API_KEY]
+    required: true
+    auth_style: bearer
+    header_name: authorization
+discovery:
+  credentials: [api_key]
+endpoints:
+  - host: ${QWEN_HOST}
+    port: 443
+    protocol: rest
+    access: read-write
+    enforcement: enforce
+binaries: [/usr/bin/node-22, /usr/bin/node]

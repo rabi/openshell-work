@@ -1,0 +1,21 @@
+id: context7
+display_name: Context7
+description: Upstash Context7 library documentation API
+category: data
+inference_capable: false
+credentials:
+  - name: api_key
+    description: Context7 API key
+    env_vars: [CONTEXT7_API_KEY]
+    required: true
+    auth_style: bearer
+    header_name: authorization
+discovery:
+  credentials: [api_key]
+endpoints:
+  - host: context7.com
+    port: 443
+    protocol: rest
+    access: read-write
+    enforcement: enforce
+binaries: [/usr/local/bin/node]

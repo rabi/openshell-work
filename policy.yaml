@@ -1,0 +1,134 @@
+version: 1
+
+filesystem_policy:
+  include_workdir: true
+  read_only: [/bin, /usr, /lib, /lib64, /proc, /dev/urandom, /etc, /var/log]
+  read_write: [/tmp, /dev/null, /dev/pts, /dev/ptmx, /dev/shm]
+
+# Missing paths (/lib64, /proc/...) are skipped instead of failing launch.
+landlock:
+  compatibility: best_effort
+
+network_policies:
+  lantrust_inference:
+    endpoints:
+      - host: ${INFERENCE_HOST_1}
+        port: 8080
+        protocol: rest
+        enforcement: enforce
+        rules:
+          - allow: { method: GET, path: /health }
+          - allow: { method: GET, path: /v1/models }
+          - allow: { method: POST, path: /v1/** }
+      - host: ${INFERENCE_HOST_2}
+        port: 8080
+        protocol: rest
+        enforcement: enforce
+        rules:
+          - allow: { method: GET, path: /health }
+          - allow: { method: GET, path: /v1/models }
+          - allow: { method: POST, path: /v1/** }
+    binaries:
+      - path: /usr/local/bin/node
+
+  grep_app:
+    endpoints:
+      - host: grep.app
+        port: 443
+        protocol: rest
+        access: read-write
+        enforcement: enforce
+    binaries:
+      - path: /usr/local/bin/node
+
+  github:
+    endpoints:
+      - host: api.github.com
+        port: 443
+        protocol: rest
+        access: read-write
+        enforcement: enforce
+      - host: github.com
+        port: 443
+        protocol: rest
+        enforcement: enforce
+        rules:
+          - allow: { method: GET, path: "**" }
+          - allow: { method: HEAD, path: "**" }
+          - allow: { method: OPTIONS, path: "**" }
+          - allow: { method: POST, path: "/**/git-upload-pack" }
+      - host: codeload.github.com
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: raw.githubusercontent.com
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: objects.githubusercontent.com
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: uploads.github.com
+        port: 443
+        protocol: rest
+        access: read-write
+        enforcement: enforce
+    binaries:
+      - path: /usr/local/bin/node
+      - path: /usr/bin/gh
+      - path: /usr/bin/git
+
+  package_registries:
+    endpoints:
+      - host: registry.npmjs.org
+        port: 443
+        protocol: rest
+        access: read-write
+        enforcement: enforce
+      - host: objects.githubusercontent.com
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+    binaries:
+      - path: /usr/local/bin/node
+      - path: /usr/local/bin/npm
+      - path: /usr/bin/gh
+
+  opendev:
+    endpoints:
+      - host: opendev.org
+        port: 443
+        protocol: rest
+        enforcement: enforce
+        rules:
+          - allow: { method: GET, path: "**" }
+          - allow: { method: HEAD, path: "**" }
+          - allow: { method: POST, path: "/**/git-upload-pack" }
+      - host: review.opendev.org
+        port: 443
+        protocol: rest
+        enforcement: enforce
+        rules:
+          - allow: { method: GET, path: "**" }
+          - allow: { method: HEAD, path: "**" }
+          - allow: { method: POST, path: "/**/git-upload-pack" }
+          - allow: { method: POST, path: "/**/git-receive-pack" }
+    binaries:
+      - path: /usr/bin/git
+      - path: /usr/bin/curl
+
+  pi_docs:
+    endpoints:
+      - host: pi.dev
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+    binaries:
+      - path: /usr/local/bin/node
+      - path: /usr/bin/curl

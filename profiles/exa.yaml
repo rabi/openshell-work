@@ -1,0 +1,26 @@
+id: exa
+display_name: Exa
+description: Exa web search and MCP API
+category: data
+inference_capable: false
+credentials:
+  - name: api_key
+    description: Exa API key
+    env_vars: [EXA_API_KEY]
+    required: true
+    auth_style: header
+    header_name: x-api-key
+discovery:
+  credentials: [api_key]
+endpoints:
+  - host: api.exa.ai
+    port: 443
+    protocol: rest
+    access: read-write
+    enforcement: enforce
+  - host: mcp.exa.ai
+    port: 443
+    protocol: rest
+    access: read-write
+    enforcement: enforce
+binaries: [/usr/local/bin/node]

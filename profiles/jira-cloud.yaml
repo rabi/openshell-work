@@ -1,0 +1,36 @@
+id: jira-cloud
+display_name: Jira Cloud
+description: Red Hat Jira Cloud REST API
+category: other
+inference_capable: false
+credentials:
+  - name: api_token
+    description: Jira Cloud API token
+    env_vars: [JIRA_API_TOKEN]
+    required: true
+    auth_style: basic
+    header_name: authorization
+discovery:
+  credentials: [api_token]
+endpoints:
+  - host: redhat.atlassian.net
+    port: 443
+    protocol: rest
+    access: read-write
+    enforcement: enforce
+  - host: api.atlassian.com
+    port: 443
+    protocol: rest
+    access: read-write
+    enforcement: enforce
+  - host: auth.atlassian.com
+    port: 443
+    protocol: rest
+    access: read-write
+    enforcement: enforce
+  - host: id.atlassian.com
+    port: 443
+    protocol: rest
+    access: read-write
+    enforcement: enforce
+binaries: [/usr/local/bin/node]

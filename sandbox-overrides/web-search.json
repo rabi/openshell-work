@@ -1,0 +1,5 @@
+{
+  "provider": "exa",
+  "allowBrowserCookies": false,
+  "summaryModel": "rhcorp/Qwen/Qwen3.8-27B-FP8"
+}
